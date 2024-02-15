@@ -17,8 +17,10 @@ void setup() {
   oled.setCursor(0,2);
   oled.print("next: ");
   oled.setCursor(0,4);
-  oled.print("number: ");
+  oled.print("mrz: ");
   Serial.begin(115200);
+  pinMode(5, OUTPUT);
+  pinMode(12, INPUT_PULLUP);
 }
 
 String wrd;
@@ -33,7 +35,28 @@ char s;
 
 //Функции-преобразователи
 void abc_to_mrz() {
-  
+  for (auto i = wmrz.begin(); i != wmrz.end(); i ++){
+    switch (*i)
+    {
+    case '1':
+      digitalWrite(5, HIGH);
+      delay(1500);
+      digitalWrite(5, LOW);
+      delay(500);
+      break;
+    case '0':
+      digitalWrite(5, HIGH);
+      delay(500);
+      digitalWrite(5, LOW);
+      delay(500);
+      break;
+    case ' ':
+      delay(2500);
+      break;
+    default:
+      break;
+    }
+  }
 }
 void loop() {
   eb.tick();
@@ -48,9 +71,9 @@ void loop() {
     oled.print("next: ");
     oled.print(abc[n]);
     oled.setCursor(0, 4);
-    oled.print("number: ");
+    oled.print("mrz: ");
     oled.clear(38, 35, 127, 60);
-    oled.print(n + 1);
+    oled.print(mrz[n]);
     }
   //обработка клика (печать символа)
   if (eb.click()){
@@ -66,6 +89,14 @@ void loop() {
     wrd.remove(count-1, 1);
     wmrz.remove(count-1, 1);
     count--;
+    oled.clear(0, 0, 127, 10);
+    oled.home();
+    oled.print(wrd);
+  }
+  if (digitalRead(12) != 1) {
+    abc_to_mrz();
+    wrd = "";
+    wmrz = "";
     oled.clear(0, 0, 127, 10);
     oled.home();
     oled.print(wrd);
