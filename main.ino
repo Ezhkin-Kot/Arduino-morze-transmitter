@@ -48,10 +48,10 @@ void abc_to_mrz() {
     switch (*i)
     {
     case DASH:
-      LightOn(seconds: 1.5);
+      LightOn(seconds = 1.5);
       break;
     case DOT:
-      LightOn(seconds: 3);
+      LightOn(seconds = 3);
       break;
     case SPACE:
       delay(5000);
