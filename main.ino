@@ -101,6 +101,7 @@ void loop() {
     abc_to_mrz();
     wrd = "";
     wmrz = "";
+    count = 0;
     oled.clear(0, 0, 127, 10);
     oled.home();
     oled.print(wrd);
