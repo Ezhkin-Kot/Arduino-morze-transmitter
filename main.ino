@@ -7,9 +7,9 @@
 GyverOLED<SSD1306_128x64, OLED_NO_BUFFER> oled;
 EncButton eb(2, 3, 4);      //назначение выводов энкодера
 
-void LightOn(seconds: unsigned short) {
+void LightOn(unsigned short seconds) {
   digitalWrite(5, HIGH);
-  delay(time * 1000);
+  delay(seconds * 1000);
   digitalWrite(5, LOW);
 }
 
@@ -32,15 +32,15 @@ void setup() {
 String wrd;
 String wmrz;
 //Задаём алфавит, откуда будем брать символы
-char char abc[43] = {'0','1','2','3','4','5','6','7','8','9','_','А','Б','В','Г','Д','Е','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я'};
+const char abc[43] = {'0','1','2','3','4','5','6','7','8','9','_','А','Б','В','Г','Д','Е','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я'};
 //Здоровенный массив с азбукой Морзе
 const char *mrz[] = {"11111 ","01111 ","00111 ","00011 ","00001 ","00000 ","10000 ","11000 ","11100 ","11110 ","  ","01 ","1000 ","011 ","110 ","100 ","0 ","0001 ","1100 ","00 ","0111 ","101 ","0100 ","11 ","10 ","111 ","0110 ","010 ","000 ","1 ","001 ","0010 ","0000 ","1010 ","1110 ","1111 ","1101 ","011010 ","1011 ","1001 ","00100 ","0011 ","0101 "};
 int n = 0;
 unsigned int count = 0;
 char s;
-const char DOT = "0";
-const char DASH = "1";
-const char SPACE = " ";
+const char DOT = '0';
+const char DASH = '1';
+const char SPACE = ' ';
 
 //Функции-преобразователи
 void abc_to_mrz() {
@@ -48,17 +48,18 @@ void abc_to_mrz() {
     switch (*i)
     {
     case DASH:
-      LightOn(seconds: 1.5);
+      LightOn(seconds = 3);
       break;
     case DOT:
-      LightOn(seconds: 3);
+      LightOn(seconds = 1);
       break;
     case SPACE:
       delay(5000);
-    default:
       break;
+    default:
+      break; 
     }
-      delay(500);
+      delay(1000);
   }
 }
 void loop() {
@@ -100,6 +101,7 @@ void loop() {
     abc_to_mrz();
     wrd = "";
     wmrz = "";
+    count = 0;
     oled.clear(0, 0, 127, 10);
     oled.home();
     oled.print(wrd);
